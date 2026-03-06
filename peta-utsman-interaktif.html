@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Edukasi Islam Era Utsmaniyyah</title>
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #3a3028 0%, #4a6712 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            position: relative;
+        }
+        /* ornamen islami di background */
+        body::before {
+            content: "☪️";
+            font-size: 120px;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,254,235,0.1) 2px, transparent 2px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .app-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255,254,235,0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 48px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 3px #fffeeb, 0 0 20px #4a6712;
+            border: 1px solid #fffeeb;
+            position: relative;
+            z-index: 1;
+        }
+        /* header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fffeeb;
+            text-shadow: 3px 3px 0 #3a3028, 0 0 15px #4a6712;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: #fffeeb;
+            font-size: 1.2rem;
+            background: rgba(58,48,40,0.6);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
+            margin-top: 8px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #4a6712;
+        }
+        /* kontrol audio (YouTube mute/unmute) */
+        .audio-control {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            z-index: 10;
+        }
+        #muteToggle {
+            background: #3a3028;
+            border: 2px solid #fffeeb;
+            color: #fffeeb;
+            font-size: 1.5rem;
+            padding: 10px 16px;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #4a6712;
+            transition: all 0.1s;
+        }
+        #muteToggle:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        /* konten panel */
+        .panel {
+            background: rgba(255,254,235,0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 48px;
+            padding: 28px 24px;
+            color: #3a3028;
+            box-shadow: inset 0 2px 8px #fffeeb, 0 10px 20px rgba(0,0,0,0.3);
+            border: 2px solid #4a6712;
+        }
+        .hidden {
+            display: none !important;
+        }
+        /* AR Card */
+        .ar-card {
+            background: #fffeeb;
+            border-radius: 36px;
+            padding: 32px 20px;
+            text-align: center;
+            border: 3px dashed #4a6712;
+            box-shadow: 0 10px 0 #3a3028;
+            margin-bottom: 24px;
+        }
+        .ar-globe-img {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid #4a6712;
+            box-shadow: 0 10px 20px #3a3028;
+        }
+        .ar-globe-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .btn-ar {
+            display: inline-block;
+            background: #4a6712;
+            color: #fffeeb;
+            font-weight: bold;
+            font-size: 1.4rem;
+            padding: 18px 40px;
+            border-radius: 60px;
+            text-decoration: none;
+            margin: 20px 0 10px;
+            border: 2px solid #fffeeb;
+            box-shadow: 0 8px 0 #3a3028;
+            transition: 0.1s;
+        }
+        .btn-ar:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+        .btn-ar small {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .ar-note {
+            background: #3a3028;
+            color: #fffeeb;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        /* ========== SEKSI PENJELASAN (TANPA VOICE OVER) ========== */
+        .explanation-section {
+            background: #fffeeb;
+            border-radius: 40px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 2px solid #4a6712;
+        }
+        .explanation-section h3 {
+            color: #3a3028;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .explanation-text {
+            width: 100%;
+            background: #f5f0d1; /* warna sedikit berbeda untuk teks */
+            padding: 20px 24px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            border: 2px solid #4a6712;
+            color: #2a201a;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* tombol kuis utama */
+        .btn-quiz-main {
+            background: #4a6712;
+            color: #fffeeb;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 60px;
+            width: 100%;
+            margin: 24px 0 0;
+            cursor: pointer;
+            border: 3px solid #fffeeb;
+            box-shadow: 0 8px 0 #3a3028;
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .btn-quiz-main:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+        /* area kuis (muncul saat tombol diklik) */
+        .quiz-wrapper {
+            margin-top: 24px;
+            background: #fffeeb;
+            border-radius: 40px;
+            padding: 24px;
+            border: 3px solid #4a6712;
+            box-shadow: inset 0 0 20px #4a6712;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            background: #3a3028;
+            color: #fffeeb;
+            padding: 12px 20px;
+            border-radius: 40px;
+            margin-bottom: 28px;
+            font-size: 1.3rem;
+        }
+        .question-box {
+            background: #fffeeb;
+            padding: 28px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            border: 3px solid #4a6712;
+        }
+        .question-text {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+            color: #3a3028;
+        }
+        .options {
+            display: grid;
+            gap: 14px;
+        }
+        .option {
+            background: #fffeeb;
+            border: 2px solid #4a6712;
+            border-radius: 60px;
+            padding: 16px 22px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #3a3028;
+        }
+        .option:hover {
+            background: #e0e0b0;
+        }
+        .option.selected {
+            background: #b8d98c;
+            border-color: #3a3028;
+            box-shadow: 0 0 0 3px #4a6712;
+        }
+        .option span.opt-letter {
+            background: #4a6712;
+            color: #fffeeb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .quiz-nav button {
+            background: #4a6712;
+            color: #fffeeb;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 5px 0 #3a3028;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 2px solid #fffeeb;
+        }
+        .quiz-nav button:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+        .quiz-nav button:disabled {
+            opacity: 0.4;
+            transform: none;
+            box-shadow: 0 5px 0 #3a3028;
+            cursor: default;
+        }
+        .back-to-ar {
+            background: #3a3028;
+            color: #fffeeb;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: 2px solid #4a6712;
+            box-shadow: 0 5px 0 #4a6712;
+        }
+        .review-item {
+            background: #fffeeb;
+            border-radius: 30px;
+            padding: 18px 22px;
+            margin-bottom: 16px;
+            border: 2px solid #4a6712;
+        }
+        .review-question {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #3a3028;
+        }
+        .review-answer {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+        }
+        .user-answer {
+            background: #f1dca8;
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+        .correct-answer {
+            background: #b8d98c;
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+        .badge-correct {
+            color: green;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-wrong {
+            color: red;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .review-score {
+            text-align: center;
+            background: #4a6712;
+            color: #fffeeb;
+            padding: 20px;
+            border-radius: 60px;
+            margin-bottom: 30px;
+        }
+        .review-score h2 {
+            font-size: 2.5rem;
+        }
+        .review-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .review-btn {
+            background: #3a3028;
+            color: #fffeeb;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 3px solid #4a6712;
+            box-shadow: 0 6px 0 #4a6712;
+            transition: 0.1s;
+        }
+        .review-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+        .review-btn.secondary {
+            background: #b67e2e;
+        }
+        footer {
+            text-align: center;
+            color: #fffeeb;
+            margin-top: 24px;
+        }
+        /* YouTube player disembunyikan */
+        #youtube-player {
+            position: absolute;
+            width: 0;
+            height: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Div untuk YouTube Player (tersembunyi) -->
+    <div id="youtube-player"></div>
+
+    <div class="audio-control">
+        <button id="muteToggle">🔇</button>
+    </div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>☾⭑ PERSEBARAN ISLAM ☾⭑</h1>
+            <p>Era Khalifah Utsman bin Affan (644–656 M)</p>
+        </div>
+
+        <!-- PANEL UTAMA (AR + TEKS PENJELASAN + TOMBOL KUIS) -->
+        <div id="mainPanel" class="panel">
+            <!-- Bagian AR (selalu tampil) dan teks penjelasan (voice over dihapus) -->
+            <div id="arSection">
+                <div class="ar-card">
+                    <div class="ar-globe-img">
+                        <img src="https://i.etsystatic.com/42659535/r/il/a75fb0/6675381463/il_570xN.6675381463_guo3.jpg" alt="Vintage Globe">
+                    </div>
+                    <h2 style="color:#3a3028; margin-bottom:8px;">Globe 3D Persebaran Islam</h2>
+                    <p style="margin-bottom:24px; font-size:1.2rem;">(via Assemblr Edu – lihat di browser atau aplikasi)</p>
+                    
+                    <!-- LINK ASSEMBLR EDU -->
+                    <a href="https://asblr.com/TNKoLR" target="_blank" rel="noopener noreferrer" class="btn-ar">
+                        🚀 BUKA PROJECT AR <small>klik, lalu izinkan kamera jika perlu</small>
+                    </a>
+                    <p class="ar-note">📱 Disarankan membuka via HP untuk pengalaman AR maksimal.<br>Di PC akan tampil sebagai objek 3D.</p>
+                </div>
+
+                <!-- ===== SEKSI PENJELASAN (TANPA VOICE OVER) ===== -->
+                <div class="explanation-section">
+                    <h3>📖 Penjelasan Peta Persebaran Islam</h3>
+                    <div class="explanation-text" id="historicalDescription">
+                        Perluasan dakwah Islam ke Armenia dan Tunisia (Afrika). Khalifah Usman bin Affan R.A. memperluas wilayah Islam ke Armenia dengan mengirim para pemuka muslim yang kemudian berhasil mengajak penduduk Armenia untuk kerja sama secara damai. Pemimpin negeri dan penduduk Armenia pun kemudian memeluk agama Islam. Sementara itu, perluasan wilayah Islam ke Tunisia dilakukan Usman bin Affan R.A. dengan mengutus para pendakwah Islam ke wilayah tersebut. Wilayah Tunisia yang saat itu berada dalam penjajahan Romawi akhirnya berhasil dibebaskan dan penduduk Tunisia pun berhasil diislamkan.
+                    </div>
+                    <!-- Tidak ada tombol play/stop dan pilih suara - fitur voice over dihapus -->
+                </div>
+
+                <!-- Tombol untuk memulai kuis -->
+                <button class="btn-quiz-main" id="startQuizBtn">📝 Mulai Kuis Interaktif</button>
+            </div>
+
+            <!-- Area Kuis (awalnya tersembunyi) -->
+            <div id="quizSection" class="quiz-wrapper hidden">
+                <button class="back-to-ar" id="backToArBtn">🔙 Kembali ke AR</button>
+                <!-- Bagian mengerjakan soal -->
+                <div id="quizContainer">
+                    <div class="quiz-header">
+                        <span id="questionCounter">Soal 1 / 10</span>
+                        <span id="scoreDisplay">Skor: 0</span>
+                    </div>
+                    <div id="quizArea"></div>
+                    <div class="quiz-nav">
+                        <button id="prevBtn" disabled>◀ Sebelumnya</button>
+                        <button id="nextBtn">Selanjutnya ▶</button>
+                    </div>
+                </div>
+                <!-- Bagian pembahasan kunci jawaban (muncul setelah selesai) -->
+                <div id="reviewPanel" class="hidden">
+                    <!-- konten diisi javascript -->
+                </div>
+            </div>
+        </div>
+
+        <footer>~ Sumber sejarah: Khulafaur Rasyidin ~</footer>
+    </div>
+
+    <script>
+        (function() {
+            // ========== DATA SOAL (10 pertanyaan) ==========
+            const questions = [
+                {
+                    question: "Siapakah Utsman bin Affan?",
+                    options: ["Khalifah ke-2", "Khalifah ke-3", "Khalifah ke-4", "Sahabat biasa"],
+                    answer: 1, // indeks 0-based, 1 = Khalifah ke-3
+                    explanation: "Utsman bin Affan adalah Khalifah ke-3 setelah Umar bin Khattab."
+                },
+                {
+                    question: "Pada masa Utsman, wilayah Islam meluas hingga ke...",
+                    options: ["Spanyol dan Perancis", "Armenia dan Afrika Utara", "Cina dan India", "Yunani dan Roma"],
+                    answer: 1,
+                    explanation: "Ekspansi ke arah timur mencapai Armenia dan Azerbaijan, ke barat hingga Libya dan Tunisia."
+                },
+                {
+                    question: "Ekspedisi laut pertama dalam Islam terjadi pada masa Utsman untuk menaklukkan?",
+                    options: ["Siprus", "Sisilia", "Kreta", "Malta"],
+                    answer: 0,
+                    explanation: "Muawiyah bin Abi Sufyan memimpin ekspedisi laut dan berhasil menaklukkan Siprus."
+                },
+                {
+                    question: "Di benua apa saja wilayah Islam berkembang di masa Utsman?",
+                    options: ["Asia dan Eropa", "Asia dan Afrika", "Afrika dan Eropa", "Asia dan Australia"],
+                    answer: 1,
+                    explanation: "Wilayah Islam membentang dari Asia (Persia, Armenia) hingga Afrika (Mesir, Libya, Tunisia)."
+                },
+                {
+                    question: "Kota apa yang menjadi pusat pemerintahan sebelum Utsman?",
+                    options: ["Mekkah", "Madinah", "Damaskus", "Kufah"],
+                    answer: 1,
+                    explanation: "Madinah tetap menjadi ibu kota Kekhalifahan Rasyidin."
+                },
+                {
+                    question: "Wilayah di Afrika Utara yang ditaklukkan pada masa Utsman?",
+                    options: ["Maroko dan Aljazair", "Libya dan Tunisia", "Mesir saja", "Sudan"],
+                    answer: 1,
+                    explanation: "Pasukan Islam melanjutkan penaklukan ke arah barat setelah Mesir, mencapai Libya dan Tunisia."
+                },
+                {
+                    question: "Sahabat yang diangkat Utsman sebagai gubernur di Mesir?",
+                    options: ["Amr bin Ash", "Abdullah bin Sa'd", "Muawiyah", "Zubair bin Awwam"],
+                    answer: 0,
+                    explanation: "Amr bin Ash tetap menjadi gubernur Mesir, meskipun sempat diganti lalu dikembalikan."
+                },
+                {
+                    question: "Perluasan ke arah timur mencapai wilayah?",
+                    options: ["Pakistan", "Azerbaijan", "Uzbekistan", "Yaman"],
+                    answer: 1,
+                    explanation: "Armenia dan Azerbaijan (Kaukasus) ditaklukkan pada masa Utsman."
+                },
+                {
+                    question: "Pada masa Utsman, Al-Qur'an mulai dibukukan menjadi?",
+                    options: ["Mushaf", "Lembaran", "Kitab", "Surah terpisah"],
+                    answer: 0,
+                    explanation: "Utsman memerintahkan pembukuan Al-Qur'an dalam satu mushaf (Mushaf Utsmani)."
+                },
+                {
+                    question: "Utsman bin Affan berasal dari suku?",
+                    options: ["Bani Hasyim", "Bani Umayyah", "Bani Makhzum", "Bani Zuhrah"],
+                    answer: 1,
+                    explanation: "Utsman berasal dari Bani Umayyah, sama seperti Abu Sufyan."
+                }
+            ];
+
+            // ========== STATE KUIS ==========
+            let currentQuestionIndex = 0;
+            let userAnswers = new Array(questions.length).fill(null);
+            let quizSubmitted = false;
+
+            // Elemen DOM
+            const arSection = document.getElementById('arSection');
+            const quizSection = document.getElementById('quizSection');
+            const startQuizBtn = document.getElementById('startQuizBtn');
+            const backToArBtn = document.getElementById('backToArBtn');
+            const quizArea = document.getElementById('quizArea');
+            const questionCounter = document.getElementById('questionCounter');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const quizContainer = document.getElementById('quizContainer');
+            const reviewPanel = document.getElementById('reviewPanel');
+
+            // ========== TAMPIL/SEMBUNYIKAN BAGIAN ==========
+            startQuizBtn.addEventListener('click', () => {
+                arSection.classList.add('hidden');
+                quizSection.classList.remove('hidden');
+                resetQuiz(); // mulai baru setiap buka kuis
+                renderQuiz();
+            });
+
+            backToArBtn.addEventListener('click', () => {
+                arSection.classList.remove('hidden');
+                quizSection.classList.add('hidden');
+            });
+
+            // ========== RENDER KUIS ==========
+            function renderQuiz() {
+                if (quizSubmitted) {
+                    quizContainer.classList.add('hidden');
+                    reviewPanel.classList.remove('hidden');
+                    renderReview();
+                    return;
+                } else {
+                    quizContainer.classList.remove('hidden');
+                    reviewPanel.classList.add('hidden');
+                }
+
+                questionCounter.textContent = `Soal ${currentQuestionIndex+1} / ${questions.length}`;
+                let tempScore = 0;
+                for (let i = 0; i < questions.length; i++) {
+                    if (userAnswers[i] !== null && userAnswers[i] === questions[i].answer) tempScore++;
+                }
+                scoreDisplay.textContent = `Skor: ${tempScore}`;
+
+                const q = questions[currentQuestionIndex];
+                let html = `<div class="question-box"><div class="question-text">${q.question}</div><div class="options">`;
+                q.options.forEach((opt, idx) => {
+                    const letter = String.fromCharCode(65 + idx);
+                    const isSelected = (userAnswers[currentQuestionIndex] === idx);
+                    html += `<div class="option ${isSelected ? 'selected' : ''}" data-opt-index="${idx}"><span class="opt-letter">${letter}</span> ${opt}</div>`;
+                });
+                html += '</div></div>';
+                quizArea.innerHTML = html;
+
+                document.querySelectorAll('.option').forEach(optDiv => {
+                    optDiv.addEventListener('click', () => {
+                        if (quizSubmitted) return;
+                        const chosenIdx = parseInt(optDiv.dataset.optIndex, 10);
+                        userAnswers[currentQuestionIndex] = chosenIdx;
+                        renderQuiz();
+                    });
+                });
+
+                prevBtn.disabled = (currentQuestionIndex === 0);
+                if (currentQuestionIndex === questions.length - 1) {
+                    nextBtn.textContent = 'Selesai ▶';
+                } else {
+                    nextBtn.textContent = 'Selanjutnya ▶';
+                }
+            }
+
+            // ========== RENDER REVIEW ==========
+            function renderReview() {
+                let finalScore = 0;
+                for (let i = 0; i < questions.length; i++) {
+                    if (userAnswers[i] !== null && userAnswers[i] === questions[i].answer) finalScore++;
+                }
+
+                let reviewHtml = `
+                    <div class="review-score">
+                        <h2>🏆 Skor Akhir: ${finalScore} / ${questions.length}</h2>
+                    </div>
+                    <h3 style="font-size:1.8rem; margin-bottom:16px;">📋 Pembahasan Kunci Jawaban</h3>
+                `;
+
+                questions.forEach((q, idx) => {
+                    const userAnsIndex = userAnswers[idx];
+                    const userAnsText = (userAnsIndex !== null) ? q.options[userAnsIndex] : '(Tidak dijawab)';
+                    const correctAnsText = q.options[q.answer];
+                    const isCorrect = (userAnsIndex === q.answer);
+                    const statusIcon = isCorrect ? '✅' : '❌';
+
+                    reviewHtml += `
+                        <div class="review-item">
+                            <div class="review-question">${idx+1}. ${q.question}</div>
+                            <div class="review-answer">
+                                <span class="user-answer">Jawaban Anda: <strong>${userAnsText}</strong> ${statusIcon}</span>
+                                <span class="correct-answer">Jawaban Benar: <strong>${correctAnsText}</strong></span>
+                            </div>
+                            <div style="margin-top:12px; font-style:italic; background:#efe0c6; padding:10px 16px; border-radius:30px;">
+                                💡 ${q.explanation}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                reviewHtml += `
+                    <div class="review-buttons">
+                        <button class="review-btn secondary" id="backToArFromReview">🔙 Kembali ke AR</button>
+                        <button class="review-btn" id="restartFromReview">🔄 Ulangi Kuis</button>
+                    </div>
+                `;
+
+                reviewPanel.innerHTML = reviewHtml;
+
+                document.getElementById('backToArFromReview').addEventListener('click', () => {
+                    arSection.classList.remove('hidden');
+                    quizSection.classList.add('hidden');
+                });
+
+                document.getElementById('restartFromReview').addEventListener('click', () => {
+                    resetQuiz();
+                    renderQuiz();
+                });
+            }
+
+            // ========== RESET QUIZ ==========
+            function resetQuiz() {
+                userAnswers = new Array(questions.length).fill(null);
+                currentQuestionIndex = 0;
+                quizSubmitted = false;
+            }
+
+            // Navigasi prev/next
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    renderQuiz();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    renderQuiz();
+                } else {
+                    quizSubmitted = true;
+                    renderQuiz();
+                }
+            });
+
+            // ========== YOUTUBE PLAYER (BACKGROUND MUSIC) ==========
+            let player;
+            const muteBtn = document.getElementById('muteToggle');
+            
+            // Fungsi ini dipanggil oleh API YouTube setelah library siap
+            window.onYouTubeIframeAPIReady = function() {
+                player = new YT.Player('youtube-player', {
+                    height: '0',
+                    width: '0',
+                    videoId: 'EnO47leTmss', // ID video dari link yang diminta
+                    playerVars: {
+                        'autoplay': 1,
+                        'loop': 1,
+                        'playlist': 'EnO47leTmss', // diperlukan untuk loop
+                        'mute': 1, // mulai dalam keadaan mute agar autoplay diizinkan
+                        'controls': 0,
+                        'disablekb': 1,
+                        'fs': 0,
+                        'modestbranding': 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady
+                    }
+                });
+            };
+
+            function onPlayerReady(event) {
+                // Player siap, tombol mute dalam keadaan mute (🔇)
+                muteBtn.textContent = '🔇';
+            }
+
+            // Toggle mute/unmute saat tombol diklik
+            muteBtn.addEventListener('click', () => {
+                if (player) {
+                    if (player.isMuted()) {
+                        player.unMute();
+                        muteBtn.textContent = '🔊';
+                    } else {
+                        player.mute();
+                        muteBtn.textContent = '🔇';
+                    }
+                }
+            });
+
+            // Inisialisasi
+            resetQuiz();
+            renderQuiz(); // untuk persiapan, tapi tidak tampil karena hidden
+
+            // ========== VOICE OVER TELAH DIHAPUS ==========
+            // Semua kode yang terkait speechSynthesis dan voice select dihilangkan.
+            // Tombol play/stop dan dropdown suara juga sudah dihapus dari HTML.
+        })();
+    </script>
+</body>
+</html>
